@@ -4,7 +4,7 @@ FROM ros:humble
 # Update and upgrade the system packages
 RUN apt update && apt upgrade -y && \
     apt install -y python3-pip libgl1 ros-humble-vision-opencv && \
-    pip install opencv-python rclpy
+    pip install opencv-python
 
 # Set the working directory to your ROS 2 package
 WORKDIR /root/ros2_ws
