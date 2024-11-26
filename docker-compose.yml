@@ -1,14 +1,15 @@
 services:
-  data_collector:
+  data-collector:
+    platform: linux/amd64
     build:
       context: ./ 
       dockerfile: Dockerfile
     restart: always
-    container_name: data_collector
+    container_name: data-collector
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
       - ROS_DOMAIN_ID=0
     network_mode: host
     volumes:
       - ./src:/root/ros2_ws/src
-    command: /root/run.sh # tail -f /dev/null
+    command: /root/run.sh

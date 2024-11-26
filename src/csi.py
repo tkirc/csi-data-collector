@@ -1,7 +1,5 @@
 import numpy as np
-import time
 import cv2
-import rclpy
 from rclpy.node import Node
 from wifi_detection_interfaces.msg import CsiData
 from sensor_msgs.msg import Image
@@ -9,13 +7,12 @@ from cv_bridge import CvBridge
 from collections import deque
 
 class CSIDataCollector(Node):
-    def __init__(self, is_video=False):
+    def __init__(self, is_video=True):
         super().__init__('csi_data')
         self._data = []
         self.csi_data = []
         self.video_frames = []
         self.buffer = deque(maxlen=5)
-
         
         # Initialize ROS2 subscribers
         self.csi_subscription = self.create_subscription(
@@ -80,13 +77,6 @@ class CSIDataCollector(Node):
         if len((list(self.buffer))) == 5:
             self.csi_data.append(np.concatenate(list(self.buffer), axis=0))
             self.video_frames.append(frame)
-
-    def collect_csi_data(self, duration=60):
-        """Collects CSI data and video frames for the specified duration."""
-        start_time = time.time()
-        while time.time() - start_time < duration:
-            rclpy.spin_once(self, timeout_sec=0.01)  # Non-blocking
-        #return self.csi, self.video_frames
 
     def save(self, csi_filename='csi_data.npy', video_filename='video_frames.mp4'):
         """Saves the CSI data and video frames to files."""
